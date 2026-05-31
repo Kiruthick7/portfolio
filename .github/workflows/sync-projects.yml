@@ -1,0 +1,48 @@
+name: Sync GitHub Projects
+
+on:
+  schedule:
+    # Run automatically every day at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Allow manual execution via the GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # Required to commit and push changes back to the repository
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run GitHub Project Sync Engine
+        run: npm run sync-projects
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Check if there are modified or untracked changes in projects directory or registry
+          if [ -n "$(git status --porcelain src/content/projects src/lib/projects.ts)" ]; then
+            echo "✨ New projects or updates detected! Committing changes..."
+            git add src/content/projects src/lib/projects.ts
+            git commit -m "chore(sync): auto-sync projects from GitHub registry [skip ci]"
+            git push
+          else
+            echo "ℹ️ No new changes detected. Portfolio registry is fully up-to-date!"
+          fi

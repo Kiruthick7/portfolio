@@ -1,0 +1,112 @@
+---
+title: "DeepTruth: Deepfake Video Detection"
+tagline: "Two-stage machine learning/deep learning pipeline utilizing a ResNet spatial CNN frame feature extractor coupled to an LSTM temporal sequence tracker. Yields 97.76% validation accuracy."
+date: "May 2024"
+stack: ["Jupyter Notebook"]
+categories: ["ML"]
+githubUrl: "https://github.com/Kiruthick7/Deepfake-Detection"
+---
+
+# DeepTruth — Spatial-Temporal Deepfake Video Detection
+
+A high-accuracy machine learning and deep learning (ML/DL) classification system. Designed to identify sophisticated frame-manipulated media using a two-stage sequential deep neural network.
+
+---
+
+## Technical Pipeline Architecture
+
+DeepTruth processes video content by separating spatial features (frame-by-frame visual anomalies) from temporal sequences (anomalous facial transitions over time):
+
+<div className="w-full overflow-x-auto border border-border rounded-xl bg-secondary/15 p-4 my-6">
+  <svg viewBox="0 0 800 320" className="w-full h-auto min-w-[760px] text-foreground" fill="none" stroke="currentColor">
+    {/* Defs for arrows and markers */}
+    <defs>
+      <marker id="arrow-deep" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 2 L 8 5 L 0 8 z" fill="currentColor" />
+      </marker>
+    </defs>
+
+    {/* Video Ingestion Column */}
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="160" height="230" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" />
+      <text x="80" y="25" textAnchor="middle" className="fill-foreground font-sans text-[10px] uppercase tracking-wider font-bold">1. Video Ingestion</text>
+
+      <rect x="15" y="60" width="130" height="50" rx="8" className="stroke-sky-500/30 fill-sky-500/5" strokeWidth="1.5" />
+      <text x="80" y="87" textAnchor="middle" className="fill-sky-700 dark:fill-sky-400 font-sans text-xs font-bold">Input Video Stream</text>
+      
+      <rect x="15" y="140" width="130" height="50" rx="8" className="stroke-sky-500/30 fill-sky-500/5" strokeWidth="1.5" />
+      <text x="80" y="167" textAnchor="middle" className="fill-sky-700 dark:fill-sky-400 font-sans text-xs font-bold">Frame Extractor</text>
+    </g>
+
+    {/* Spatial Extraction Column */}
+    <g transform="translate(210, 40)">
+      <rect x="0" y="0" width="180" height="230" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" />
+      <text x="90" y="25" textAnchor="middle" className="fill-foreground font-sans text-[10px] uppercase tracking-wider font-bold">2. Spatial Extractor</text>
+
+      <rect x="15" y="60" width="150" height="50" rx="8" className="stroke-emerald-500/30 fill-emerald-500/5" strokeWidth="1.5" />
+      <text x="90" y="87" textAnchor="middle" className="fill-emerald-700 dark:fill-emerald-400 font-sans text-xs font-bold">ResNet CNN Core</text>
+
+      <rect x="15" y="140" width="150" height="55" rx="8" className="stroke-emerald-500/30 fill-emerald-500/5" strokeWidth="1.5" />
+      <text x="90" y="167" textAnchor="middle" className="fill-emerald-700 dark:fill-emerald-400 font-sans text-xs font-bold">2048-D Feature Vector</text>
+      <text x="90" y="182" textAnchor="middle" className="fill-muted-foreground font-sans text-[9px] uppercase tracking-wider font-bold">Compressed Frame</text>
+    </g>
+
+    {/* Temporal Modeling Column */}
+    <g transform="translate(420, 40)">
+      <rect x="0" y="0" width="190" height="230" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" strokeDasharray="4,4" />
+      <text x="95" y="25" textAnchor="middle" className="fill-muted-foreground font-sans text-[10px] uppercase tracking-wider font-bold">3. Temporal Tracking</text>
+
+      <rect x="15" y="50" width="160" height="45" rx="8" className="stroke-amber-500/30 fill-amber-500/5" strokeWidth="1.5" />
+      <text x="95" y="75" textAnchor="middle" className="fill-amber-700 dark:fill-amber-400 font-sans text-xs font-bold">LSTM Recurrent Net</text>
+
+      <rect x="15" y="110" width="160" height="45" rx="8" className="stroke-amber-500/30 fill-amber-500/5" strokeWidth="1.5" />
+      <text x="95" y="135" textAnchor="middle" className="fill-amber-700 dark:fill-amber-400 font-sans text-xs font-bold">Hidden Sequence States</text>
+
+      <rect x="15" y="170" width="160" height="45" rx="8" className="stroke-amber-500/30 fill-amber-500/5" strokeWidth="1.5" />
+      <text x="95" y="195" textAnchor="middle" className="fill-amber-700 dark:fill-amber-400 font-sans text-xs font-bold">Softmax Classifier</text>
+    </g>
+
+    {/* Decision Evaluation Column */}
+    <g transform="translate(640, 40)">
+      <rect x="0" y="0" width="140" height="230" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" />
+      <text x="70" y="25" textAnchor="middle" className="fill-foreground font-sans text-[10px] uppercase tracking-wider font-bold">4. Verdict</text>
+
+      <rect x="15" y="90" width="110" height="60" rx="8" className="stroke-red-500/30 fill-red-500/5" strokeWidth="1.5" />
+      <text x="70" y="125" textAnchor="middle" className="fill-red-700 dark:fill-red-400 font-sans text-xs font-bold">Real / Fake</text>
+      <text x="70" y="138" textAnchor="middle" className="fill-muted-foreground font-sans text-[9px] uppercase tracking-wider font-bold">Classification</text>
+    </g>
+
+    {/* Connection Paths (Arrows) */}
+    {/* Frame Extractor to CNN */}
+    <path d="M 180, 155 L 210, 95" stroke="currentColor" strokeWidth="1.5" markerEnd="url(#arrow-deep)" />
+
+    {/* Vector to LSTM */}
+    <path d="M 390, 167 L 420, 75" stroke="currentColor" strokeWidth="1.5" markerEnd="url(#arrow-deep)" />
+
+    {/* Softmax to Verdict */}
+    <path d="M 610, 192 L 640, 120" stroke="currentColor" strokeWidth="1.5" markerEnd="url(#arrow-deep)" />
+  </svg>
+</div>
+
+**Key Deep Learning Paradigm:** A single image deepfake model fails to capture inconsistencies across frame swaps. By utilizing a **ResNet CNN spatial extractor** in parallel with an **LSTM temporal sequence tracker**, the pipeline detects minute flickering anomalies that occur during artificial face transitions.
+
+---
+
+## Engineering Design Review & Machine Learning Decisions
+
+### 1. Spatial Extractor Selection (Transfer Learning)
+* **Decision:** We deployed a pre-trained **ResNet-50** Convolutional Neural Network as our spatial feature extractor instead of training a CNN from scratch.
+* **Rationale:** Spatial CNNs require massive volumes of general image parameters to capture basic details (edges, lighting, textures). Leveraging a ResNet model pre-trained on ImageNet significantly decreases local training times and captures structural face attributes instantly.
+* **Trade-off:** ResNet-50 generates a dense feature dimension, increasing downstream network ingestion overhead, but guarantees stable, high-fidelity spatial representation.
+
+### 2. Recurrent Temporal Tracking (LSTM Layer)
+* **Decision:** Leveraged a **Long Short-Term Memory (LSTM)** network to process the sequential feature vectors output by the CNN.
+* **Rationale:** Deepfakes frequently display anomalies in temporal movement (e.g., eye blinking intervals, mouth movement consistency across frames). LSTMs use gated memory cells to track temporal dependencies across long sequences, making them highly effective at catching artificial splice anomalies.
+* **Trade-off:** Recurrent units cannot execute parallel GPU training as effectively as newer Transformer architectures, but they maintain a highly efficient, lightweight computational footprint for batch inferences.
+
+---
+
+## Model Evaluation & Performance Metrics
+
+* **Validation Accuracy:** **97.76%** on test sets.
+* **Core Stack:** PyTorch, Torchvision, NumPy, scikit-learn.

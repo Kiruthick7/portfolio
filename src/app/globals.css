@@ -1,26 +1,191 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* ── Design Tokens ── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Light-first palette (Light Mode is First Priority) ── */
+:root {
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.09 0 0);
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0.09 0 0);
+  --popover: oklch(0.97 0 0);
+  --popover-foreground: oklch(0.09 0 0);
+  --primary: oklch(0.09 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.09 0 0);
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.09 0 0);
+  --border: oklch(0 0 0 / 8%);
+  --input: oklch(0 0 0 / 8%);
+  --ring: oklch(0.09 0 0 / 25%);
+  --radius: 0.5rem;
+  --accent-brand: oklch(0.52 0.18 265);
+  --accent-brand-muted: oklch(0.52 0.18 265 / 10%);
+}
+
+.dark {
+  --background: oklch(0.09 0 0);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.12 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --popover: oklch(0.12 0 0);
+  --popover-foreground: oklch(0.97 0 0);
+  --primary: oklch(0.97 0 0);
+  --primary-foreground: oklch(0.09 0 0);
+  --secondary: oklch(0.17 0 0);
+  --secondary-foreground: oklch(0.97 0 0);
+  --muted: oklch(0.17 0 0);
+  --muted-foreground: oklch(0.56 0 0);
+  --accent: oklch(0.17 0 0);
+  --accent-foreground: oklch(0.97 0 0);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.97 0 0 / 30%);
+  --accent-brand: oklch(0.65 0.18 265);
+  --accent-brand-muted: oklch(0.65 0.18 265 / 12%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  /* ── Typography scale ── */
+  h1, h2, h3, h4 {
+    @apply tracking-tight;
+    letter-spacing: -0.03em;
+  }
+
+  h1 { @apply text-4xl font-bold md:text-5xl lg:text-6xl; }
+  h2 { @apply text-2xl font-semibold md:text-3xl; }
+  h3 { @apply text-lg font-semibold; }
+
+  /* ── Selection ── */
+  ::selection {
+    background: var(--accent-brand-muted);
+    color: var(--foreground);
+  }
+
+  /* ── Focus ring ── */
+  :focus-visible {
+    outline: 2px solid var(--accent-brand);
+    outline-offset: 3px;
+    border-radius: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Subtle gradient noise texture */
+  .bg-grid {
+    background-image:
+      linear-gradient(oklch(1 0 0 / 3%) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(1 0 0 / 3%) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Section max-width container */
+  .container-content {
+    @apply mx-auto w-full max-w-[1280px] px-6;
+  }
+
+  /* Fade-up animation utility */
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Stagger children */
+  .stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger > *:nth-child(2) { animation-delay: 80ms; }
+  .stagger > *:nth-child(3) { animation-delay: 160ms; }
+  .stagger > *:nth-child(4) { animation-delay: 240ms; }
+  .stagger > *:nth-child(5) { animation-delay: 320ms; }
+
+  /* Prose for MDX */
+  .prose-portfolio {
+    @apply text-[16px] text-muted-foreground leading-relaxed;
+  }
+  .prose-portfolio p {
+    @apply mb-6 text-[15px] md:text-[16px] leading-relaxed;
+  }
+  .prose-portfolio h2 {
+    @apply mt-12 mb-5 text-xl md:text-2xl font-bold tracking-tight text-foreground border-b border-border/40 pb-2;
+  }
+  .prose-portfolio h3 {
+    @apply mt-8 mb-4 text-base md:text-lg font-semibold text-foreground;
+  }
+  .prose-portfolio ul, .prose-portfolio ol {
+    @apply mb-6 ml-6 list-disc space-y-2;
+  }
+  .prose-portfolio li {
+    @apply text-[15px] md:text-[16px] leading-relaxed;
+  }
+  .prose-portfolio code {
+    @apply rounded bg-secondary/80 border border-border/60 px-1.5 py-0.5 text-[13px] md:text-[14px] font-mono text-foreground;
+  }
+  .prose-portfolio pre {
+    @apply my-8 rounded-xl border border-border bg-secondary/15 p-5 overflow-x-auto;
+  }
+  .prose-portfolio pre code {
+    @apply bg-transparent border-none p-0 text-[13px] md:text-[14px];
+  }
+  .prose-portfolio a {
+    color: var(--accent-brand);
+    @apply underline underline-offset-4 decoration-1 hover:text-foreground transition-colors;
+  }
+  .prose-portfolio blockquote {
+    border-left-width: 4px;
+    border-color: var(--accent-brand);
+    @apply bg-secondary/10 rounded-r-lg my-6 py-4 pl-5 pr-4 text-[15px] md:text-[16px] text-foreground/95 italic leading-relaxed;
+  }
+  .prose-portfolio strong {
+    @apply text-foreground font-semibold;
+  }
 }

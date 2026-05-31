@@ -1,0 +1,125 @@
+---
+title: "Dev.to Model Context Protocol (MCP) Server"
+tagline: "Production-ready Model Context Protocol server exposing Dev.to APIs as native agentic tools. Built with Python and uv packaging."
+date: "Nov 2025"
+stack: ["Python"]
+categories: ["Backend"]
+githubUrl: "https://github.com/Kiruthick7/mcp"
+---
+
+# Model Context Protocol (MCP) Server for Dev.to Publishing
+
+A production-grade Python tool implementing Anthropic's **Model Context Protocol (MCP)**. Exposes specialized blog publishing integrations as native, schema-validated tools directly invocable by IDE AI agents (e.g., Claude Desktop, Cursor).
+
+---
+
+## Technical Architecture
+
+The server establishes a secure stdin/stdout channel allowing AI systems to treat API boundaries as local functional execution blocks:
+
+<div className="w-full overflow-x-auto border border-border rounded-xl bg-secondary/15 p-4 my-6">
+  <svg viewBox="0 0 800 300" className="w-full h-auto min-w-[760px] text-foreground" fill="none" stroke="currentColor">
+    {/* Defs for arrows and markers */}
+    <defs>
+      <marker id="arrow-mcp" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 2 L 8 5 L 0 8 z" fill="currentColor" />
+      </marker>
+    </defs>
+
+    {/* Client/Agent Column */}
+    <g transform="translate(30, 30)">
+      <rect x="0" y="0" width="200" height="220" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" />
+      <text x="100" y="25" textAnchor="middle" className="fill-foreground font-sans text-xs font-bold uppercase tracking-wider">Client Agent Layer</text>
+
+      {/* Claude Desktop */}
+      <rect x="15" y="60" width="170" height="55" rx="8" className="stroke-sky-500/30 fill-sky-500/5" strokeWidth="1.5" />
+      <text x="100" y="87" textAnchor="middle" className="fill-sky-700 dark:fill-sky-400 font-sans text-xs font-bold">Claude Desktop / IDE</text>
+      <text x="100" y="102" textAnchor="middle" className="fill-muted-foreground font-sans text-[10px]">MCP Client Container</text>
+
+      {/* LLM Context Loop */}
+      <rect x="15" y="135" width="170" height="55" rx="8" className="stroke-sky-500/30 fill-sky-500/5" strokeWidth="1.5" />
+      <text x="100" y="162" textAnchor="middle" className="fill-sky-700 dark:fill-sky-400 font-sans text-xs font-bold">LLM Context Loop</text>
+      <text x="100" y="177" textAnchor="middle" className="fill-muted-foreground font-sans text-[10px]">Dynamic Tool Binders</text>
+    </g>
+
+    {/* Python MCP Server Column */}
+    <g transform="translate(280, 30)">
+      <rect x="0" y="0" width="250" height="220" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" strokeDasharray="4,4" />
+      <text x="125" y="25" textAnchor="middle" className="fill-muted-foreground font-sans text-[10px] uppercase tracking-wider font-bold">Python MCP Server</text>
+
+      {/* stdio JSON-RPC */}
+      <rect x="20" y="50" width="210" height="45" rx="8" className="stroke-amber-500/30 fill-amber-500/5" strokeWidth="1.5" />
+      <text x="125" y="75" textAnchor="middle" className="fill-amber-700 dark:fill-amber-400 font-sans text-xs font-bold">JSON-RPC stdio Handler</text>
+
+      {/* Schema Registry */}
+      <rect x="20" y="110" width="210" height="40" rx="6" className="stroke-purple-500/30 fill-purple-500/5" strokeWidth="1.5" />
+      <text x="125" y="133" textAnchor="middle" className="fill-purple-700 dark:fill-purple-400 font-sans text-xs font-bold">Tool Schema Registry</text>
+
+      {/* Dev.to Publisher Tool */}
+      <rect x="20" y="165" width="210" height="40" rx="6" className="stroke-amber-500/30 fill-amber-500/5" strokeWidth="1.5" />
+      <text x="125" y="188" textAnchor="middle" className="fill-amber-700 dark:fill-amber-400 font-sans text-xs font-bold">publish_blog_to_devto</text>
+    </g>
+
+    {/* External Dev.to Platform */}
+    <g transform="translate(580, 30)">
+      <rect x="0" y="0" width="190" height="220" rx="12" className="stroke-border" fill="rgba(255,255,255,0.01)" strokeWidth="1.5" />
+      <text x="95" y="25" textAnchor="middle" className="fill-foreground font-sans text-xs font-bold uppercase tracking-wider">External API</text>
+
+      {/* Dev.to API Node */}
+      <rect x="15" y="85" width="160" height="70" rx="8" className="stroke-red-500/30 fill-red-500/5" strokeWidth="1.5" />
+      <text x="95" y="120" textAnchor="middle" className="fill-red-700 dark:fill-red-400 font-sans text-xs font-bold">Dev.to REST Gateway</text>
+      <text x="95" y="135" textAnchor="middle" className="fill-muted-foreground font-sans text-[10px]">API Key Authenticated</text>
+    </g>
+
+    {/* Connection Paths (Arrows) */}
+    {/* Stdio JSON-RPC Link */}
+    <path d="M 230, 90 L 280, 90" stroke="currentColor" strokeWidth="1.5" markerEnd="url(#arrow-mcp)" />
+    <path d="M 280, 105 L 230, 105" stroke="currentColor" strokeWidth="1.5" markerEnd="url(#arrow-mcp)" />
+
+    {/* Publisher Tool to Dev.to REST */}
+    <path d="M 530, 215 L 580, 160" stroke="currentColor" strokeWidth="1.5" markerEnd="url(#arrow-mcp)" />
+  </svg>
+</div>
+
+**Key Protocol Paradigm:** Rather than making manual API calls, the client-facing LLM reads the tool schemas published by the MCP server, binds arguments to a typed call payload, and executes the python tool natively over standard IO.
+
+---
+
+## Engineering Design Review & Decisions
+
+### 1. Unified stdio Protocol Interface
+* **Decision:** We implemented standard input/output (`stdio`) as the primary transport protocol channel rather than HTTP/WebSockets.
+* **Rationale:** Establishing a local CLI runtime transport loop avoids port allocation conflicts on local development machines, completely bypasses external firewall constraints, and ensures low-latency execution directly managed by the host client application (e.g. Claude Desktop).
+
+### 2. High-Performance Packaging with `uv`
+* **Decision:** Replaced traditional pip virtual environments with Astral's `uv` tool suite for dependency locked synchronization.
+* **Rationale:** `uv` leverages a Rust-based toolchain that executes package synchronizations under **150ms** and compiles isolated execution environments in sub-second timelines. This guarantees rapid, reproducible local environment setup for developers deploying the MCP server.
+
+### 3. API Key Sandboxing
+* **Decision:** Bounded critical publishing authority entirely within standard local environment variables (`DEVTO_API_KEY`) loaded dynamically.
+* **Rationale:** Ensures no operational tokens are exposed during tool schemas initialization and allows developers to swap publishing access profiles dynamically without modifying the underlying tool registration script.
+
+---
+
+## Tool Capabilities & Specifications
+
+### Exposed Native Tools
+* `publish_blog_to_devto` — Programmatically drafts and publishes markdown assets directly to Dev.to.
+  * **Input Payload Constraints:** Requires `title`, `body_markdown`, `tags` (array of strings), and an optional `series` identifier.
+
+---
+
+## Local Installation & Verification
+
+### Setup Dependencies via `uv`:
+```bash
+# Verify uv utility
+uv --version
+
+# Build isolated virtual environment
+uv venv
+
+# Synchronize dependencies
+source .venv/bin/activate
+uv sync
+```
