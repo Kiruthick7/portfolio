@@ -33,6 +33,8 @@ graph TD
 
 ### 1. Chunking Strategy (Recursive vs Fixed-Size)
 * **Decision:** Selected a **Recursive Character Text Splitter** configured with `chunk_size=500` and `chunk_overlap=50`.
+* **Visual Timeline Mobile Padding:** Refined the visual milestone timeline margins (`ml-2 md:ml-3`) and padding (`pl-5 md:pl-8`), and implemented dynamic timeline circle sizes (`-left-[27px] md:-left-[37px]`) on mobile viewports to prevent any text clipping.
+* **Vercel Speed Insights Integration:** Installed and configured `@vercel/speed-insights` inside `RootLayout` (`layout.tsx`). This dynamically tracks real-user Core Web Vitals (LCP, FID, CLS) and real-time page speeds directly on Vercel's analytics dashboard.
 * **Rationale:** Fixed-size chunking frequently splits sentences in half, causing loss of contextual coherence. The recursive character splitter dynamically attempts to split by paragraphs (`\n\n`), sentences (`.`), and words (` `) to preserve complete semantic phrases. A 50-character overlap maintains operational continuity across boundaries.
 
 ### 2. FAISS Vector Database for Retrieval
