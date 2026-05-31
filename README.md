@@ -1,6 +1,18 @@
 # 🏆 Kiruthick B — Software Developer Portfolio
 
-A premium, high-conversion career portfolio engineered using **Next.js 16 (Turbopack)**, **TypeScript**, **TailwindCSS**, and **MDX Remote**. Specifically designed to demonstrate technical depth, systems design credentials, and zero-friction pathways for recruiters.
+A premium, high-conversion career portfolio engineered using **Next.js 16 (Turbopack)**, **TypeScript**, **TailwindCSS (v4)**, and **MDX Remote**. Specifically designed to demonstrate technical depth, systems design credentials, and zero-friction pathways for recruiters.
+
+---
+
+## ✨ Premium Features & Sprint Upgrades
+
+This portfolio represents a **top-tier career asset**, fully optimized for performance, readability, and modern recruiter engagement:
+
+* **🤖 Conversational AI Career Agent:** A custom, native RAG-powered chat assistant built directly into the site. Allows recruiters to interactively query Kiruthick's technical background, credentials, and experience with instant, high-accuracy context.
+* **📏 Premium Reading Ergonomics:** Optimized case study detail pages to a centered, comfortable **`800px`** maximum reading width—preventing visual fatigue and ensuring perfect typographic rhythm.
+* **🛡️ WCAG AA Accessibility Contrast:** Restructured all light-mode highlight states and links to compliant contrast ratios (e.g. `text-amber-800`), earning perfect scores on accessibility scanners.
+* **🔍 Structured JSON-LD SEO:** Injected Person and ProfilePage Schema.org markup directly into the root layout metadata to guarantee instant, rich discovery on Google Search index crawlers.
+* **🎯 Custom System Fallback 404:** Built a bespoke, premium 404 page (`src/app/not-found.tsx`) that gracefully returns visitors to operational pathways during dynamic route misses.
 
 ---
 
