@@ -88,6 +88,22 @@ export const PROJECTS: Project[] = [
     "featured": true
   },
   {
+    "slug": "carbonpilotai",
+    "title": "CarbonPilotAI",
+    "tagline": "Open source software development project.",
+    "description": "Open source software development project.",
+    "status": "supporting",
+    "categories": [
+      "Backend"
+    ],
+    "stack": [
+      "Software Engineering"
+    ],
+    "date": "Jun 2026",
+    "githubUrl": "https://github.com/Kiruthick7/CarbonPilotAI",
+    "featured": false
+  },
+  {
     "slug": "pulseai",
     "title": "PulseAI",
     "tagline": "Open source software development project.",
