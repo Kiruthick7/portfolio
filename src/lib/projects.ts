@@ -141,6 +141,34 @@ export const PROJECTS: Project[] = [
     "featured": false
   },
   {
+    "slug": "portfolio",
+    "title": "portfolio",
+    "tagline": "Open source software development project.",
+    "description": "Open source software development project.",
+    "status": "supporting",
+    "categories": [
+      "AI",
+      "Cloud",
+      "Mobile",
+      "Frontend",
+      "Backend"
+    ],
+    "stack": [
+      "TypeScript",
+      "FastAPI",
+      "React",
+      "Next.js",
+      "TailwindCSS",
+      "AWS",
+      "MySQL",
+      "Flutter"
+    ],
+    "date": "Dec 2025",
+    "githubUrl": "https://github.com/Kiruthick7/portfolio",
+    "liveUrl": "https://kiruthickdev.vercel.app",
+    "featured": false
+  },
+  {
     "slug": "mcp",
     "title": "Dev.to Model Context Protocol (MCP) Server",
     "tagline": "Production-ready Model Context Protocol server exposing Dev.to APIs as native agentic tools. Built with Python and uv packaging.",
