@@ -141,6 +141,27 @@ export const PROJECTS: Project[] = [
     "featured": false
   },
   {
+    "slug": "jira_status_report_tool",
+    "title": "Jira_Status_Report_Tool",
+    "tagline": "Open source software development project.",
+    "description": "Open source software development project.",
+    "status": "supporting",
+    "categories": [
+      "Cloud",
+      "Backend"
+    ],
+    "stack": [
+      "Python",
+      "GCP",
+      "AWS",
+      "Docker",
+      "Terraform"
+    ],
+    "date": "Feb 2026",
+    "githubUrl": "https://github.com/Kiruthick7/Jira_Status_Report_Tool",
+    "featured": false
+  },
+  {
     "slug": "portfolio",
     "title": "portfolio",
     "tagline": "Open source software development project.",
